@@ -1,20 +1,21 @@
+//Make all the features from Apify available 
+const Apify = require('apify');
+
+//request the page that you want
 const Apify = require('apify');
 
 Apify.main(async () => {
+    //create the request queue instance.
     const requestQueue = await Apify.openRequestQueue();
-    await requestQueue.addRequest(new Apify.Request({ url: 'https://www.iana.org/' }));
-    const pseudoUrls = [new Apify.PseudoUrl('https://www.iana.org/[.*]')];
+    // then, and ONLY then, can we add a request to it
+    await requestQueue.addRequest({ url: 'https://www.apify.com'});
 
-    const crawler = new Apify.PuppeteerCrawler({
-        requestQueue,
-        handlePageFunction: async ({ request, page }) => {
-            const title = await page.title();
-            console.log(`Title of ${request.url}: ${title}`);
-            await Apify.utils.puppeteer.enqueueLinks(page, 'a', pseudoUrls, requestQueue);
-        },
-        maxRequestsPerCrawl: 50,
-        maxConcurrency: 10,
-    });
-
-    await crawler.run();
 });
+
+consta handlePageFunction = async ({ request, $ }) => {
+    const title = $('title').text();
+    console.log(`The title of "${request.url}" is: ${title}.`);
+
+}
+
+//Set up the crawler, passing a single options object as an argument. 
